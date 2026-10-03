@@ -22,3 +22,8 @@ export * from './enums';
  * 
  */
 export type Booking = Prisma.BookingModel
+/**
+ * Model IdempotencyKey
+ * 
+ */
+export type IdempotencyKey = Prisma.IdempotencyKeyModel
