@@ -33,6 +33,7 @@ export async function createBookingService(
         await lock.unlock();
     }
 }
+
 //Problem is what if the two request comes parellely
 //One request get idem key and context switch happen 
 //Another req also get idem key and booking confirmed 
@@ -73,5 +74,4 @@ export async function confirmBookingService(idempotencyKey:string) {
 
         return booking
     })
-    
 }
