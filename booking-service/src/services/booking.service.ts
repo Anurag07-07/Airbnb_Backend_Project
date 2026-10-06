@@ -1,26 +1,37 @@
+import { redlock } from "../config/redis.config";
 import { CreateBookingDTO } from "../DTO/booking.dto";
 import { generateIdempotencyKey } from "../helpers/generateIdempotencyKey";
 import { prisma } from "../prisma/client";
 import { confirmBooking, createBooking, createIdempotencyKey, finalizeIdempotencyKey, getIdempotencyKeyWithLock } from "../repo/booking";
-import { BadRequestError, NotFoundError } from "../utils/errors/app.error";
+import { BadRequestError, InternalServerError, NotFoundError } from "../utils/errors/app.error";
 
 export async function createBookingService(
     createBookingDTO:CreateBookingDTO
 ) {
-    const booking = await createBooking({
-        userId:createBookingDTO.userId,
-        hotelId:createBookingDTO.hotelId,
-        totalGuests:createBookingDTO.totalGuests,
-        bookingAmount:createBookingDTO.bookingAmount
-    })
+    const ttl = process.env.REDLOCK_TTL
+    const bookingResources = `hotel:${createBookingDTO.hotelId}`
 
-    const idempotencyKey = generateIdempotencyKey();
+    const lock = await redlock.acquire([bookingResources], Number(ttl));
+    try {
+            const booking = await createBooking({
+            userId:createBookingDTO.userId,
+            hotelId:createBookingDTO.hotelId,
+            totalGuests:createBookingDTO.totalGuests,
+            bookingAmount:createBookingDTO.bookingAmount
+        })
 
-    await createIdempotencyKey(idempotencyKey,booking.id)
-    return {
-        bookingId:booking.id,
-        idempotencyKey:idempotencyKey
-    };
+        const idempotencyKey = generateIdempotencyKey();
+
+        await createIdempotencyKey(idempotencyKey,booking.id)
+        return {
+            bookingId:booking.id,
+            idempotencyKey:idempotencyKey
+        };
+    } catch(error){
+        throw new InternalServerError(`Failed to acquire lock for booking resource`)
+    } finally {
+        await lock.unlock();
+    }
 }
 //Problem is what if the two request comes parellely
 //One request get idem key and context switch happen 
