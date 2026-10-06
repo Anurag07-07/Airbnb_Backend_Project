@@ -605,7 +605,7 @@ export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeo
 
 export const IdempotencyKeyScalarFieldEnum = {
   id: 'id',
-  key: 'key',
+  idemkey: 'idemkey',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   finalized: 'finalized',
@@ -624,7 +624,7 @@ export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
 export const IdempotencyKeyOrderByRelevanceFieldEnum = {
-  key: 'key'
+  idemkey: 'idemkey'
 } as const
 
 export type IdempotencyKeyOrderByRelevanceFieldEnum = (typeof IdempotencyKeyOrderByRelevanceFieldEnum)[keyof typeof IdempotencyKeyOrderByRelevanceFieldEnum]
