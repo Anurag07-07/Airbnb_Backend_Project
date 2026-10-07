@@ -7,7 +7,8 @@ function connectToRedis(){
         let connection:Redis;
         const redisConfig = {
             port:serverConfig.REDIS_PORT,
-            host:serverConfig.REDIS_HOST
+            host:serverConfig.REDIS_HOST,
+            maxRetriesPerRequest:null
         }
         //Singleton Object
         return ()=>{
