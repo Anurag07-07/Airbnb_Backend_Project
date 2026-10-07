@@ -112,7 +112,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "src/config/mailer.config.ts", "src/templetes"  ],
   "exclude": [
     "node_modules"
   ]
