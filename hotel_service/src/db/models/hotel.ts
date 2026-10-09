@@ -64,8 +64,8 @@ Hotel.init(
   {
     tableName: 'hotels',
     sequelize: sequelize,
-    underscored: true, //Converted createdAt -> created_at 
-    timestamps: true, 
+    underscored: true, // createdAt --> created_at
+    timestamps: true, // createdAt, updatedAt
   }
 );
 
