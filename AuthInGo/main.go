@@ -4,12 +4,7 @@ import (
 	"AuthInGo/app"
 )
 func main(){
-	cfg := app.Config{
-		Addr: ":3001",
-	}
-	app := app.Application{
-		Config: cfg,
-	}
-
+	cfg := app.NewConfig(":8080")  //Set the Server Config
+	app := app.NewApplication(cfg)
 	app.Run()
 }
