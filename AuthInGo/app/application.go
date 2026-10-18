@@ -34,7 +34,7 @@ func NewApplication(cfg Config) *Application {
 func (app *Application) Run() error {
 	server := &http.Server{
 		Addr: app.Config.Addr,
-		Handler: nil , //Setup a Chi Router
+		Handler: router.SetupRouter(), //Setup a Chi Router
 		ReadTimeout:10 * time.Second, // Set read timeout to 10 sec
 		WriteTimeout:10 * time.Second, // Set write timeout to 10 sec
 	}
